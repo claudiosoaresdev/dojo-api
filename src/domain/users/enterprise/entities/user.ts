@@ -6,6 +6,7 @@ export interface UserProps {
   displayName: string;
   email: string;
   password?: string;
+  followersCount: number;
   createdAt: Date;
   updatedAt?: Date | null;
 }
@@ -38,17 +39,27 @@ export class User extends Entity<UserProps> {
     this.touch();
   }
 
+  get followersCount(): number {
+    return this.props.followersCount;
+  }
+
+  set followersCount(followersCount: number) {
+    this.props.followersCount = followersCount;
+    this.touch();
+  }
+
   private touch(): void {
     this.props.updatedAt = new Date();
   }
 
   static create(
-    props: Optional<UserProps, 'createdAt'>,
+    props: Optional<UserProps, 'followersCount' | 'createdAt'>,
     id?: UniqueEntityID,
   ): User {
     const user = new User(
       {
         ...props,
+        followersCount: props.followersCount ?? 0,
         createdAt: props.createdAt ?? new Date(),
       },
       id,

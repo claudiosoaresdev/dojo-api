@@ -4,9 +4,10 @@ import { Either, left, right } from 'src/core/either';
 import { PaginationResponse } from 'src/core/repositories/pagination-response';
 
 import { Post } from 'src/domain/feed/enterprise/entities/post';
-import { PostsRepository } from 'src/domain/feed/application/repositories/posts.repository';
 import { UsersRepository } from 'src/domain/users/application/repositories/users.repository';
 import { UserNotFoundError } from 'src/domain/users/application/usecases/errors/user-not-found.error';
+import { PostsRepository } from 'src/domain/feed/application/repositories/posts.repository';
+import { FollowerRelationshipsRepository } from '../repositories/follower-relationships.repository';
 
 interface PaginatePostsUseCaseRequest {
   userId: string;
@@ -20,10 +21,11 @@ type PaginatePostsUseCaseResponse = Either<
 >;
 
 @Injectable()
-export class PaginatePostsUseCase {
+export class PaginateFeedUseCase {
   constructor(
-    private readonly postsRepository: PostsRepository,
     private readonly usersRepository: UsersRepository,
+    private readonly followerRelationshipsRepository: FollowerRelationshipsRepository,
+    private readonly postsRepository: PostsRepository,
   ) {}
 
   public async execute({
@@ -37,10 +39,20 @@ export class PaginatePostsUseCase {
       return left(new UserNotFoundError());
     }
 
-    const { data, totalCount } = await this.postsRepository.paginate({
-      userId,
+    const followingRelationships =
+      await this.followerRelationshipsRepository.findAllUsersFollowedByUserId(
+        userId,
+      );
+
+    const followingIds = followingRelationships.map((rel) =>
+      rel.followingId.toValue(),
+    );
+
+    const { data, totalCount } = await this.postsRepository.paginateByUserIds({
+      followingIds,
       page,
       limit,
+      sortOrder: 'RECENT',
     });
 
     return right({

@@ -41,10 +41,10 @@ export class CreatePostUseCase {
       authorId: userExists.id,
     });
 
-    const createdPost = await this.postsRepository.create(post);
+    await this.postsRepository.create(post);
 
     return right({
-      post: createdPost,
+      post,
     });
   }
 }

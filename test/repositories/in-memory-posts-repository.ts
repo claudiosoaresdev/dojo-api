@@ -1,20 +1,27 @@
-import { PaginationParams } from 'src/core/repositories/pagination-params';
 import { PaginationResponse } from 'src/core/repositories/pagination-response';
 
 import { Post } from 'src/domain/feed/enterprise/entities/post';
-import { PostsRepository } from 'src/domain/feed/application/repositories/posts.repository';
+import {
+  PaginatePostsParams,
+  PaginatePostsByUserIdsParams,
+  PostsRepository,
+} from 'src/domain/feed/application/repositories/posts.repository';
+import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
 
 export class InMemoryPostsRepository implements PostsRepository {
   public items: Post[] = [];
 
   public async paginate({
+    userId,
     page,
     limit,
-  }: PaginationParams): Promise<PaginationResponse<Post>> {
+  }: PaginatePostsParams): Promise<PaginationResponse<Post>> {
     const start = (page - 1) * limit;
     const end = start + limit;
 
-    const posts = this.items.slice(start, end);
+    const posts = this.items
+      .filter((rel) => rel.authorId.equals(new UniqueEntityID(userId)))
+      .slice(start, end);
 
     return {
       data: posts,
@@ -22,20 +29,36 @@ export class InMemoryPostsRepository implements PostsRepository {
     };
   }
 
-  public async paginateRecent({
+  public async paginateByUserIds({
+    followingIds,
     page,
     limit,
-  }: PaginationParams): Promise<PaginationResponse<Post>> {
+    sortOrder,
+  }: PaginatePostsByUserIdsParams): Promise<PaginationResponse<Post>> {
     const start = (page - 1) * limit;
-    const end = start * limit;
+    const end = start + limit;
 
-    const posts = this.items
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-      .slice(start, end);
+    let posts = this.items.filter((post) =>
+      followingIds.includes(post.authorId.toValue()),
+    );
+
+    if (sortOrder === 'RECENT') {
+      posts = posts.sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+      );
+    } else if (sortOrder === 'RELEVANT') {
+      // Espaço reservado para lógica de classificação por relevância
+      // Por enquanto, podemos classificar porcreateAt como espaço reservado
+      posts = posts.sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+      );
+    }
+
+    const paginatedPosts = posts.slice(start, end);
 
     return {
-      data: posts,
-      totalCount: this.items.length,
+      data: paginatedPosts,
+      totalCount: posts.length,
     };
   }
 

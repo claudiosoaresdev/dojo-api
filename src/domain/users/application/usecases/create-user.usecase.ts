@@ -40,10 +40,10 @@ export class CreateUserUseCase {
       password,
     });
 
-    const createdUser = await this.usersRepository.create(user);
+    await this.usersRepository.create(user);
 
     return right({
-      user: createdUser,
+      user,
     });
   }
 }

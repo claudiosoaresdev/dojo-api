@@ -53,6 +53,17 @@ export class InMemoryUsersRepository implements UsersRepository {
     return this.items[itemIndex];
   }
 
+  public async updateFollowersCount(
+    userId: string,
+    increment: number,
+  ): Promise<void> {
+    const itemIndex = this.items.findIndex(
+      (item) => item.id.toValue() === userId,
+    );
+
+    this.items[itemIndex].followersCount += increment;
+  }
+
   public async delete(user: User): Promise<void> {
     const itemIndex = this.items.findIndex((item) => item.id === user.id);
 

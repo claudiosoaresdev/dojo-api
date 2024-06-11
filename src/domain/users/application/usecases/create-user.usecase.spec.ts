@@ -19,5 +19,6 @@ describe('Create User', async () => {
     });
 
     expect(result.isRight()).toBe(true);
+    // expect(inMemoryUsersRepository.items[0]).toEqual(result.value?.user);
   });
 });
