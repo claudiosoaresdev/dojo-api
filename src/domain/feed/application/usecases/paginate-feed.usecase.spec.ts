@@ -227,10 +227,7 @@ describe('Paginate Feed', async () => {
 
     inMemoryFollowerRelationshipsRepository.create(followerRelationship3);
 
-    inMemoryFollowerRelationshipsRepository.delete(
-      user.id.toValue(),
-      following1.id.toValue(),
-    );
+    inMemoryFollowerRelationshipsRepository.delete(followerRelationship1);
 
     const result = await sut.execute({
       userId: 'user-1',

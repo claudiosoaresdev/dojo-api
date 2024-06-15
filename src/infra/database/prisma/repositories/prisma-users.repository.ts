@@ -105,6 +105,22 @@ export class PrismaUsersRepositoryImpl implements UsersRepository {
     });
   }
 
+  public async updateFollowingCount(
+    user: User,
+    increment: number,
+  ): Promise<void> {
+    const data = PrismaUserMapper.toPrisma(user);
+
+    await this.prismaService.user.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        followingCount: data.followingCount + increment,
+      },
+    });
+  }
+
   public async delete(user: User): Promise<void> {
     const data = PrismaUserMapper.toPrisma(user);
 

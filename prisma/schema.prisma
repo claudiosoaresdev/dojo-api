@@ -25,9 +25,39 @@ model User {
   password          String?
   followersCount    Int      @default(0) @map("followers_count")
   followingCount    Int      @default(0) @map("followings_count")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  followers        FollowerRelationship[]   @relation("UserFollowers")
+  followings       FollowerRelationship[]   @relation("UserFollowings")
+  initiatedFriends FriendshipRelationship[] @relation("UserInitiatedFriends")
+  acceptedFriends  FriendshipRelationship[] @relation("UserAcceptedFriends")
 
   @@map("users")
+}
+
+model FollowerRelationship {
+  id          String   @id @default(uuid()) @db.Uuid()
+  followerId  String   @db.Uuid()
+  followingId String   @db.Uuid()
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  follower  User @relation("UserFollowers", fields: [followerId], references: [id])
+  following User @relation("UserFollowings", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
+  @@map("follower_relationships")
+}
+
+model FriendshipRelationship {
+  id          String   @id @default(uuid()) @db.Uuid()
+  initiatorId String   @db.Uuid()
+  acceptorId  String   @db.Uuid()
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  initiator User @relation("UserInitiatedFriends", fields: [initiatorId], references: [id])
+  acceptor  User @relation("UserAcceptedFriends", fields: [acceptorId], references: [id])
+
+  @@unique([initiatorId, acceptorId])
+  @@map("friendship_relationships")
 }

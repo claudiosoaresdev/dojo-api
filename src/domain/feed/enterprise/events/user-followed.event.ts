@@ -1,7 +1,7 @@
 import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
 import { DomainEvent } from 'src/core/events/domain-event';
 
-import { FollowerRelationship } from 'src/domain/feed/enterprise/entities/follower-relationship';
+import { FollowerRelationship } from 'src/domain/users/enterprise/entities/follower-relationship';
 
 export class UserFollowedEvent implements DomainEvent {
   public ocurredAt: Date;

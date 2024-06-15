@@ -1,4 +1,4 @@
-import { FriendshipRelationship } from 'src/domain/feed/enterprise/entities/friendship-relationship';
+import { FriendshipRelationship } from 'src/domain/users/enterprise/entities/friendship-relationship';
 
 export abstract class FriendshipRelationshipsRepository {
   abstract create(

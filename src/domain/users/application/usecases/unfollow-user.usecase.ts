@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 
 import { Either, left, right } from 'src/core/either';
 
-import { FollowerRelationshipsRepository } from 'src/domain/feed/application/repositories/follower-relationships.repository';
-import { FollowRelationshipNotFoundError } from 'src/domain/feed/application/usecases/errors/follow-relationship-not-found.error';
+import { FollowerRelationshipsRepository } from 'src/domain/users/application/repositories/follower-relationships.repository';
+import { FollowRelationshipNotFoundError } from 'src/domain/users/application/usecases/errors/follow-relationship-not-found.error';
 import { UsersRepository } from 'src/domain/users/application/repositories/users.repository';
 import { UserNotFoundError } from 'src/domain/users/application/usecases/errors/user-not-found.error';
-import { FriendshipRelationshipsRepository } from 'src/domain/feed/application/repositories/friendship-relationship.repository';
+import { FriendshipRelationshipsRepository } from 'src/domain/users/application/repositories/friendship-relationship.repository';
 
 interface UnfollowUserUseCaseRequest {
   followerId: string;
@@ -39,17 +39,17 @@ export class UnfollowUserUseCase {
       return left(new UserNotFoundError());
     }
 
-    const follow =
+    const followerRelationship =
       await this.followerRelationshipsRepository.findByFollowerIdAndFollowingId(
         followerExists.id.toValue(),
         followingExists.id.toValue(),
       );
 
-    if (!follow) {
+    if (!followerRelationship) {
       return left(new FollowRelationshipNotFoundError());
     }
 
-    await this.followerRelationshipsRepository.delete(followerId, followingId);
+    await this.followerRelationshipsRepository.delete(followerRelationship);
 
     const reciprocalFollow =
       await this.followerRelationshipsRepository.findByFollowerIdAndFollowingId(

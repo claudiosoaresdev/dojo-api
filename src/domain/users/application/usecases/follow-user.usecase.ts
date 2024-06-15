@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 
 import { Either, left, right } from 'src/core/either';
 
-import { FollowerRelationship } from 'src/domain/feed/enterprise/entities/follower-relationship';
-import { FollowerRelationshipsRepository } from 'src/domain/feed/application/repositories/follower-relationships.repository';
+import { FollowerRelationship } from 'src/domain/users/enterprise/entities/follower-relationship';
+import { FollowerRelationshipsRepository } from 'src/domain/users/application/repositories/follower-relationships.repository';
 import { UsersRepository } from 'src/domain/users/application/repositories/users.repository';
 import { UserNotFoundError } from 'src/domain/users/application/usecases/errors/user-not-found.error';
-import { FriendshipRelationship } from 'src/domain/feed/enterprise/entities/friendship-relationship';
-import { FriendshipRelationshipsRepository } from 'src/domain/feed/application/repositories/friendship-relationship.repository';
+import { FriendshipRelationship } from 'src/domain/users/enterprise/entities/friendship-relationship';
+import { FriendshipRelationshipsRepository } from 'src/domain/users/application/repositories/friendship-relationship.repository';
 
 interface FollowUserUseCaseRequest {
   followerId: string;
@@ -58,12 +58,16 @@ export class FollowUserUseCase {
     if (reciprocalFollow) {
       const followerForFriendshipRelationship = FriendshipRelationship.create({
         initiatorId: followerExists.id,
+        initiator: followingExists,
         acceptorId: followingExists.id,
+        acceptor: followerExists,
       });
 
       const followingForFriendshipRelationship = FriendshipRelationship.create({
         initiatorId: followingExists.id,
+        initiator: followingExists,
         acceptorId: followerExists.id,
+        acceptor: followerExists,
       });
 
       await this.friendshipRelationshipsRepository.create(
