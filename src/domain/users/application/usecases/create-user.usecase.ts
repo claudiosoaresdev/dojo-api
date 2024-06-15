@@ -5,9 +5,11 @@ import { Either, left, right } from 'src/core/either';
 import { User } from 'src/domain/users/enterprise/entities/user';
 import { UsersRepository } from 'src/domain/users/application/repositories/users.repository';
 import { UserAlreadyExistsError } from 'src/domain/users/application/usecases/errors/user-already-exists.error';
+import { HashGenerator } from 'src/domain/auth/application/cryptography/hash-generator';
 
 interface CreateUserUseCaseRequest {
-  displayName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 }
@@ -21,10 +23,14 @@ type CreateUserUseCaseResponse = Either<
 
 @Injectable()
 export class CreateUserUseCase {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly hashGenerator: HashGenerator,
+  ) {}
 
   public async execute({
-    displayName,
+    firstName,
+    lastName,
     email,
     password,
   }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
@@ -34,10 +40,13 @@ export class CreateUserUseCase {
       return left(new UserAlreadyExistsError());
     }
 
+    const passwordHash = await this.hashGenerator.hash(password);
+
     const user = User.create({
-      displayName,
+      firstName,
+      lastName,
       email,
-      password,
+      password: passwordHash,
     });
 
     await this.usersRepository.create(user);

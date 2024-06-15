@@ -40,7 +40,7 @@ export class InMemoryFollowerRelationshipsRepository
     this.items.push(followerRelationship);
 
     await this.usersRepository.updateFollowersCount(
-      followerRelationship.followingId.toValue(),
+      followerRelationship.following,
       1,
     );
 
@@ -56,8 +56,10 @@ export class InMemoryFollowerRelationshipsRepository
         item.followingId.toValue() === followingId,
     );
 
+    const following = this.items[itemIndex].following;
+
     this.items.splice(itemIndex, 1);
 
-    await this.usersRepository.updateFollowersCount(followingId, -1);
+    await this.usersRepository.updateFollowersCount(following, -1);
   }
 }

@@ -94,21 +94,27 @@ describe('Paginate Feed', async () => {
 
     const followerRelationship1 = makeFollowerRelationship({
       followerId: user.id,
+      follower: user,
       followingId: following1.id,
+      following: following1,
     });
 
     inMemoryFollowerRelationshipsRepository.create(followerRelationship1);
 
     const followerRelationship2 = makeFollowerRelationship({
       followerId: user.id,
+      follower: user,
       followingId: following2.id,
+      following: following2,
     });
 
     inMemoryFollowerRelationshipsRepository.create(followerRelationship2);
 
     const followerRelationship3 = makeFollowerRelationship({
       followerId: user.id,
+      follower: user,
       followingId: following3.id,
+      following: following3,
     });
 
     inMemoryFollowerRelationshipsRepository.create(followerRelationship3);
@@ -196,21 +202,27 @@ describe('Paginate Feed', async () => {
 
     const followerRelationship1 = makeFollowerRelationship({
       followerId: user.id,
+      follower: user,
       followingId: following1.id,
+      following: following1,
     });
 
     inMemoryFollowerRelationshipsRepository.create(followerRelationship1);
 
     const followerRelationship2 = makeFollowerRelationship({
       followerId: user.id,
+      follower: user,
       followingId: following2.id,
+      following: following2,
     });
 
     inMemoryFollowerRelationshipsRepository.create(followerRelationship2);
 
     const followerRelationship3 = makeFollowerRelationship({
       followerId: user.id,
+      follower: user,
       followingId: following3.id,
+      following: following3,
     });
 
     inMemoryFollowerRelationshipsRepository.create(followerRelationship3);

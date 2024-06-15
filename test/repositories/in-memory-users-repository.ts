@@ -54,11 +54,11 @@ export class InMemoryUsersRepository implements UsersRepository {
   }
 
   public async updateFollowersCount(
-    userId: string,
+    user: User,
     increment: number,
   ): Promise<void> {
     const itemIndex = this.items.findIndex(
-      (item) => item.id.toValue() === userId,
+      (item) => item.id.toValue() === user.id.toValue(),
     );
 
     this.items[itemIndex].followersCount += increment;

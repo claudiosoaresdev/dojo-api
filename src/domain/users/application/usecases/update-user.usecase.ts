@@ -8,7 +8,9 @@ import { UserNotFoundError } from 'src/domain/users/application/usecases/errors/
 
 interface UpdateUserUseCaseRequest {
   userId: string;
-  displayName?: string;
+  firstName?: string;
+  lastName?: string;
+  bio?: string;
   email?: string;
   password?: string;
 }
@@ -26,7 +28,9 @@ export class UpdateUserUseCase {
 
   public async execute({
     userId,
-    displayName,
+    firstName,
+    lastName,
+    bio,
     email,
     password,
   }: UpdateUserUseCaseRequest): Promise<UpdateUserUseCaseResponse> {
@@ -36,11 +40,19 @@ export class UpdateUserUseCase {
       return left(new UserNotFoundError());
     }
 
-    if (displayName && displayName !== userExists.displayName.toString()) {
-      userExists.displayName = displayName;
+    if (firstName && firstName !== userExists.firstName) {
+      userExists.firstName = firstName;
     }
 
-    if (email && email !== userExists.email.toString()) {
+    if (lastName && lastName !== userExists.lastName) {
+      userExists.lastName = lastName;
+    }
+
+    if (bio && bio !== userExists.bio) {
+      userExists.bio = bio;
+    }
+
+    if (email && email !== userExists.email) {
       userExists.email = email;
     }
 

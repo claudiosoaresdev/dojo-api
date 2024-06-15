@@ -3,21 +3,63 @@ import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
 import { Optional } from 'src/core/types/optional';
 
 export interface UserProps {
-  displayName: string;
+  firstName: string;
+  lastName: string;
+  bio?: string;
+  profilePictureUrl?: string;
+  coverPhotoUrl?: string;
   email: string;
+  isEmailVerified?: boolean;
   password?: string;
   followersCount: number;
+  followingCount: number;
   createdAt: Date;
   updatedAt?: Date | null;
 }
 
 export class User extends Entity<UserProps> {
-  get displayName(): string {
-    return this.props.displayName;
+  get firstName(): string {
+    return this.props.firstName;
   }
 
-  set displayName(displayName: string) {
-    this.props.displayName = displayName;
+  set firstName(firstName: string) {
+    this.props.firstName = firstName;
+    this.touch();
+  }
+
+  get lastName(): string {
+    return this.props.lastName;
+  }
+
+  set lastName(lastName: string) {
+    this.props.lastName = lastName;
+    this.touch();
+  }
+
+  get bio(): string | undefined {
+    return this.props.bio;
+  }
+
+  set bio(bio: string) {
+    this.props.bio = bio;
+    this.touch();
+  }
+
+  get profilePictureUrl(): string | undefined {
+    return this.props.profilePictureUrl;
+  }
+
+  set profilePictureUrl(profilePictureUrl: string) {
+    this.props.profilePictureUrl = profilePictureUrl;
+    this.touch();
+  }
+
+  get coverPhotoUrl(): string | undefined {
+    return this.props.coverPhotoUrl;
+  }
+
+  set coverPhotoUrl(coverPhotoUrl: string) {
+    this.props.coverPhotoUrl = coverPhotoUrl;
     this.touch();
   }
 
@@ -27,6 +69,15 @@ export class User extends Entity<UserProps> {
 
   set email(email: string) {
     this.props.email = email;
+    this.touch();
+  }
+
+  get isEmailVerified(): boolean {
+    return this.props.isEmailVerified;
+  }
+
+  set isEmailVerified(isEmailVerified: boolean) {
+    this.props.isEmailVerified = isEmailVerified;
     this.touch();
   }
 
@@ -48,18 +99,38 @@ export class User extends Entity<UserProps> {
     this.touch();
   }
 
+  get followingCount(): number {
+    return this.props.followingCount;
+  }
+
+  set followingCount(followingCount: number) {
+    this.props.followingCount = followingCount;
+    this.touch();
+  }
+
   private touch(): void {
     this.props.updatedAt = new Date();
   }
 
   static create(
-    props: Optional<UserProps, 'followersCount' | 'createdAt'>,
+    props: Optional<
+      UserProps,
+      | 'bio'
+      | 'profilePictureUrl'
+      | 'followersCount'
+      | 'followingCount'
+      | 'createdAt'
+    >,
     id?: UniqueEntityID,
   ): User {
     const user = new User(
       {
         ...props,
+        bio: props.bio ?? undefined,
+        profilePictureUrl: props.profilePictureUrl ?? undefined,
+        coverPhotoUrl: props.coverPhotoUrl ?? undefined,
         followersCount: props.followersCount ?? 0,
+        followingCount: props.followingCount ?? 0,
         createdAt: props.createdAt ?? new Date(),
       },
       id,

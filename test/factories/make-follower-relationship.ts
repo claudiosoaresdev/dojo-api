@@ -12,7 +12,9 @@ export function makeFollowerRelationship(
   const followerRelationship = FollowerRelationship.create(
     {
       followerId: override.followerId,
+      follower: override.follower,
       followingId: override.followingId,
+      following: override.following,
       ...override,
     },
     id,

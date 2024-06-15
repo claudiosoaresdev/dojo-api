@@ -42,7 +42,9 @@ export class FollowUserUseCase {
 
     const followerRelationship = FollowerRelationship.create({
       followerId: followerExists.id,
+      follower: followerExists,
       followingId: followingExists.id,
+      following: followingExists,
     });
 
     await this.followerRelationshipsRepository.create(followerRelationship);

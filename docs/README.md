@@ -278,3 +278,38 @@ Certifique-se de que tudo está configurado corretamente fazendo um commit de te
 3. Tente fazer um commit com `git commit -m "feat: teste do Husky"`.
 
 Se tudo estiver configurado corretamente, o Husky deve rodar os linters, os testes e verificar a mensagem do commit antes de permitir que o commit seja realizado.
+
+```bash
+$ npm i @nestjs/passport @nestjs/jwt passport passport-local passport-jwt 
+$ npm i @types/passport-local @types/passport-jwt -D
+$ npm i jsonwebtoken 
+$ npm i @types/jsonwebtoken -D
+$ npm i bcrypt 
+$ npm i @types/bcrypt -D
+```
+
+## Generate Key RSA-256
+
+### Private Key
+
+```bash
+$ openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
+```
+
+### Public Key
+
+```bash
+$ openssl rsa -pubout -in private_key.pem -out public_key.pem
+```
+
+### Convert Private Key RSA-256 to Base64
+
+```bash
+$ base64 -i private_key.pem -o private_key_base64.tsx
+```
+
+### Convert Public Key RSA-256 to Base64
+
+```bash
+$ base64 -i public_key.pem -o public_key_base64.tsx
+```

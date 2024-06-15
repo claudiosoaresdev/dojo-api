@@ -35,7 +35,9 @@ describe('Unfollow User', async () => {
 
     const followRelationship = makeFollowerRelationship({
       followerId: follower.id,
+      follower: follower,
       followingId: following.id,
+      following: following,
     });
 
     inMemoryFollowerRelationshipsRepository.create(followRelationship);

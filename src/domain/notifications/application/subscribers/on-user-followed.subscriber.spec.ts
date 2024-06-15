@@ -49,7 +49,9 @@ describe('On User Followed', () => {
 
     const followerRelationship = makeFollowerRelationship({
       followerId: follower.id,
+      follower: follower,
       followingId: following.id,
+      following: following,
     });
 
     await inMemoryFollowerRelationshipsRepository.create(followerRelationship);
