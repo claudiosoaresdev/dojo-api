@@ -1,5 +1,5 @@
-import { FollowerRelationship } from 'src/domain/feed/enterprise/entities/follower-relationship';
-import { FollowerRelationshipsRepository } from 'src/domain/feed/application/repositories/follower-relationships.repository';
+import { FollowerRelationship } from 'src/domain/users/enterprise/entities/follower-relationship';
+import { FollowerRelationshipsRepository } from 'src/domain/users/application/repositories/follower-relationships.repository';
 
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository';
 import { DomainEvents } from 'src/core/events/domain-events';
@@ -44,22 +44,31 @@ export class InMemoryFollowerRelationshipsRepository
       1,
     );
 
+    await this.usersRepository.updateFollowingCount(
+      followerRelationship.follower,
+      1,
+    );
+
     DomainEvents.dispatchEventsForAggregate(followerRelationship.id);
 
     return followerRelationship;
   }
 
-  public async delete(followerId: string, followingId: string): Promise<void> {
+  public async delete(
+    followerRelationship: FollowerRelationship,
+  ): Promise<void> {
     const itemIndex = this.items.findIndex(
       (item) =>
-        item.followerId.toValue() === followerId &&
-        item.followingId.toValue() === followingId,
+        item.followerId.equals(followerRelationship.followerId) &&
+        item.followingId.equals(followerRelationship.followingId),
     );
 
+    const follower = this.items[itemIndex].follower;
     const following = this.items[itemIndex].following;
 
     this.items.splice(itemIndex, 1);
 
     await this.usersRepository.updateFollowersCount(following, -1);
+    await this.usersRepository.updateFollowingCount(follower, -1);
   }
 }

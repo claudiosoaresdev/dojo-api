@@ -12,5 +12,6 @@ export abstract class UsersRepository {
   abstract create(user: User): Promise<User>;
   abstract update(user: User): Promise<User>;
   abstract updateFollowersCount(user: User, increment: number): Promise<void>;
+  abstract updateFollowingCount(user: User, increment: number): Promise<void>;
   abstract delete(user: User): Promise<void>;
 }

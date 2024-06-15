@@ -2,6 +2,9 @@ import { Entity } from 'src/core/entities/entity';
 import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
 import { Optional } from 'src/core/types/optional';
 
+import { FollowerRelationship } from 'src/domain/users/enterprise/entities/follower-relationship';
+import { FriendshipRelationship } from 'src/domain/users/enterprise/entities/friendship-relationship';
+
 export interface UserProps {
   firstName: string;
   lastName: string;
@@ -13,6 +16,10 @@ export interface UserProps {
   password?: string;
   followersCount: number;
   followingCount: number;
+  followers?: FollowerRelationship[];
+  followings?: FollowerRelationship[];
+  initiatedFriends?: FriendshipRelationship[];
+  acceptedFriends?: FriendshipRelationship[];
   createdAt: Date;
   updatedAt?: Date | null;
 }
@@ -108,6 +115,26 @@ export class User extends Entity<UserProps> {
     this.touch();
   }
 
+  get followers(): FollowerRelationship[] | undefined {
+    return this.props.followers;
+  }
+
+  get followings(): FollowerRelationship[] | undefined {
+    return this.props.followings;
+  }
+
+  get initiatedFriends(): FriendshipRelationship[] | undefined {
+    return this.props.initiatedFriends;
+  }
+
+  get acceptedFriends(): FriendshipRelationship[] | undefined {
+    return this.props.acceptedFriends;
+  }
+
+  get createdAt(): Date {
+    return this.props.createdAt;
+  }
+
   private touch(): void {
     this.props.updatedAt = new Date();
   }
@@ -119,6 +146,10 @@ export class User extends Entity<UserProps> {
       | 'profilePictureUrl'
       | 'followersCount'
       | 'followingCount'
+      | 'followers'
+      | 'followings'
+      | 'initiatedFriends'
+      | 'acceptedFriends'
       | 'createdAt'
     >,
     id?: UniqueEntityID,
@@ -131,6 +162,10 @@ export class User extends Entity<UserProps> {
         coverPhotoUrl: props.coverPhotoUrl ?? undefined,
         followersCount: props.followersCount ?? 0,
         followingCount: props.followingCount ?? 0,
+        followers: props.followers ?? [],
+        followings: props.followings ?? [],
+        initiatedFriends: props.initiatedFriends ?? [],
+        acceptedFriends: props.acceptedFriends ?? [],
         createdAt: props.createdAt ?? new Date(),
       },
       id,

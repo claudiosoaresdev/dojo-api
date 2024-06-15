@@ -225,18 +225,13 @@ Crie um arquivo `commitlint.config.js` na raiz do seu projeto e adicione a segui
 module.exports = {
   extends: ['@commitlint/config-conventional'],
   rules: {
-    'type-enum': [2, 'always', [
-      'feat',
-      'fix',
-      'chore',
-      'docs',
-      'style',
-      'refactor',
-      'perf',
-      'test'
-    ]],
-    'subject-case': [0, 'never']
-  }
+    'type-enum': [
+      2,
+      'always',
+      ['feat', 'fix', 'chore', 'docs', 'style', 'refactor', 'perf', 'test'],
+    ],
+    'subject-case': [0, 'never'],
+  },
 };
 ```
 
@@ -280,11 +275,11 @@ Certifique-se de que tudo está configurado corretamente fazendo um commit de te
 Se tudo estiver configurado corretamente, o Husky deve rodar os linters, os testes e verificar a mensagem do commit antes de permitir que o commit seja realizado.
 
 ```bash
-$ npm i @nestjs/passport @nestjs/jwt passport passport-local passport-jwt 
+$ npm i @nestjs/passport @nestjs/jwt passport passport-local passport-jwt
 $ npm i @types/passport-local @types/passport-jwt -D
-$ npm i jsonwebtoken 
+$ npm i jsonwebtoken
 $ npm i @types/jsonwebtoken -D
-$ npm i bcrypt 
+$ npm i bcrypt
 $ npm i @types/bcrypt -D
 ```
 

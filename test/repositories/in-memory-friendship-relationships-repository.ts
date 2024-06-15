@@ -1,5 +1,5 @@
-import { FriendshipRelationship } from 'src/domain/feed/enterprise/entities/friendship-relationship';
-import { FriendshipRelationshipsRepository } from 'src/domain/feed/application/repositories/friendship-relationship.repository';
+import { FriendshipRelationship } from 'src/domain/users/enterprise/entities/friendship-relationship';
+import { FriendshipRelationshipsRepository } from 'src/domain/users/application/repositories/friendship-relationship.repository';
 
 export class InMemoryFriendshipRelationshipsRepository
   implements FriendshipRelationshipsRepository

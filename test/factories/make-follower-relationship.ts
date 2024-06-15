@@ -3,7 +3,7 @@ import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
 import {
   FollowerRelationship,
   FollowerRelationshipProps,
-} from 'src/domain/feed/enterprise/entities/follower-relationship';
+} from 'src/domain/users/enterprise/entities/follower-relationship';
 
 export function makeFollowerRelationship(
   override: Partial<FollowerRelationshipProps> = {},

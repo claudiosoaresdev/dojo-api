@@ -7,7 +7,7 @@ import { Post } from 'src/domain/feed/enterprise/entities/post';
 import { UsersRepository } from 'src/domain/users/application/repositories/users.repository';
 import { UserNotFoundError } from 'src/domain/users/application/usecases/errors/user-not-found.error';
 import { PostsRepository } from 'src/domain/feed/application/repositories/posts.repository';
-import { FollowerRelationshipsRepository } from '../repositories/follower-relationships.repository';
+import { FollowerRelationshipsRepository } from '../../../users/application/repositories/follower-relationships.repository';
 
 interface PaginatePostsUseCaseRequest {
   userId: string;

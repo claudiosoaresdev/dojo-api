@@ -3,7 +3,7 @@ import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
 import {
   FriendshipRelationship,
   FriendshipRelationshipProps,
-} from 'src/domain/feed/enterprise/entities/friendship-relationship';
+} from 'src/domain/users/enterprise/entities/friendship-relationship';
 
 export function makeFriendshipRelationship(
   override: Partial<FriendshipRelationshipProps> = {},

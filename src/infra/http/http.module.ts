@@ -14,6 +14,8 @@ import { CreateUserController } from 'src/infra/http/controllers/users/create-us
 import { GetUserController } from 'src/infra/http/controllers/users/get-user.controller';
 import { UpdateUserController } from 'src/infra/http/controllers/users/update-user.controller';
 import { DeleteUserController } from 'src/infra/http/controllers/users/delete-user.controller';
+import { UnfollowUserController } from './controllers/users/unfollow-user.controller';
+import { FollowUserController } from './controllers/users/follow-user.controller';
 
 // usecases
 
@@ -26,6 +28,8 @@ import { CreateUserUseCase } from 'src/domain/users/application/usecases/create-
 import { GetUserUseCase } from 'src/domain/users/application/usecases/get-user.usecase';
 import { UpdateUserUseCase } from 'src/domain/users/application/usecases/update-user.usecase';
 import { DeleteUserUseCase } from 'src/domain/users/application/usecases/delete-user.usecase';
+import { FollowUserUseCase } from 'src/domain/users/application/usecases/follow-user.usecase';
+import { UnfollowUserUseCase } from 'src/domain/users/application/usecases/unfollow-user.usecase';
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -39,6 +43,9 @@ import { DeleteUserUseCase } from 'src/domain/users/application/usecases/delete-
     GetUserController,
     UpdateUserController,
     DeleteUserController,
+
+    FollowUserController,
+    UnfollowUserController,
   ],
   providers: [
     // auth
@@ -50,6 +57,9 @@ import { DeleteUserUseCase } from 'src/domain/users/application/usecases/delete-
     GetUserUseCase,
     UpdateUserUseCase,
     DeleteUserUseCase,
+
+    FollowUserUseCase,
+    UnfollowUserUseCase,
   ],
 })
 export class HttpModule {}
