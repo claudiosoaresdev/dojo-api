@@ -27,6 +27,8 @@ async function bootstrap() {
     .addServer('http://localhost:3333')
     .addTag('auth')
     .addTag('users')
+    .addTag('feed')
+    .addTag('posts')
     .build();
 
   patchNestJsSwagger();

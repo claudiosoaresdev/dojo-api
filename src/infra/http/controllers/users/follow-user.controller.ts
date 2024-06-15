@@ -47,9 +47,9 @@ export class FollowUserController {
 
       switch (error.constructor) {
         case UserNotFoundError:
-          throw new NotFoundException();
+          throw new NotFoundException(error.message);
         default:
-          throw new BadRequestException();
+          throw new BadRequestException(error.message);
       }
     }
   }

@@ -5,10 +5,12 @@ import {
   HttpStatus,
   Param,
   HttpCode,
+  NotFoundException,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { DeleteUserUseCase } from 'src/domain/users/application/usecases/delete-user.usecase';
+import { UserNotFoundError } from 'src/domain/users/application/usecases/errors/user-not-found.error';
 
 @Controller('users/:userId')
 @ApiTags('users')
@@ -38,7 +40,14 @@ export class DeleteUserController {
     });
 
     if (result.isLeft()) {
-      throw new BadRequestException();
+      const error = result.value;
+
+      switch (error.constructor) {
+        case UserNotFoundError:
+          throw new NotFoundException(error.message);
+        default:
+          throw new BadRequestException(error.message);
+      }
     }
   }
 }

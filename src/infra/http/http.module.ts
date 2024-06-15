@@ -14,8 +14,18 @@ import { CreateUserController } from 'src/infra/http/controllers/users/create-us
 import { GetUserController } from 'src/infra/http/controllers/users/get-user.controller';
 import { UpdateUserController } from 'src/infra/http/controllers/users/update-user.controller';
 import { DeleteUserController } from 'src/infra/http/controllers/users/delete-user.controller';
-import { UnfollowUserController } from './controllers/users/unfollow-user.controller';
-import { FollowUserController } from './controllers/users/follow-user.controller';
+import { UnfollowUserController } from 'src/infra/http/controllers/users/unfollow-user.controller';
+import { FollowUserController } from 'src/infra/http/controllers/users/follow-user.controller';
+
+// feed
+import { FetchFeedController } from 'src/infra/http/controllers/feed/fetch-feed.controller';
+
+// posts
+import { FetchPostsController } from 'src/infra/http/controllers/posts/fetch-posts.controller';
+import { CreatePostController } from 'src/infra/http/controllers/posts/create-post.controller';
+import { GetPostController } from 'src/infra/http/controllers/posts/get-post.controller';
+import { UpdatePostController } from 'src/infra/http/controllers/posts/update-post.controller';
+import { DeletePostController } from 'src/infra/http/controllers/posts/delete-post.controller';
 
 // usecases
 
@@ -30,6 +40,16 @@ import { UpdateUserUseCase } from 'src/domain/users/application/usecases/update-
 import { DeleteUserUseCase } from 'src/domain/users/application/usecases/delete-user.usecase';
 import { FollowUserUseCase } from 'src/domain/users/application/usecases/follow-user.usecase';
 import { UnfollowUserUseCase } from 'src/domain/users/application/usecases/unfollow-user.usecase';
+
+// feed
+import { PaginateFeedUseCase } from 'src/domain/feed/application/usecases/paginate-feed.usecase';
+
+// posts
+import { PaginatePostsUseCase } from 'src/domain/feed/application/usecases/paginate-posts.usecase';
+import { CreatePostUseCase } from 'src/domain/feed/application/usecases/create-post.usecase';
+import { GetPostUseCase } from 'src/domain/feed/application/usecases/get-post.usecase';
+import { UpdatePostUseCase } from 'src/domain/feed/application/usecases/update-post.usecase';
+import { DeletePostUseCase } from 'src/domain/feed/application/usecases/delete-post.usecase';
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -46,6 +66,15 @@ import { UnfollowUserUseCase } from 'src/domain/users/application/usecases/unfol
 
     FollowUserController,
     UnfollowUserController,
+
+    // feed
+    FetchFeedController,
+
+    FetchPostsController,
+    CreatePostController,
+    GetPostController,
+    UpdatePostController,
+    DeletePostController,
   ],
   providers: [
     // auth
@@ -60,6 +89,15 @@ import { UnfollowUserUseCase } from 'src/domain/users/application/usecases/unfol
 
     FollowUserUseCase,
     UnfollowUserUseCase,
+
+    // feed
+    PaginateFeedUseCase,
+
+    PaginatePostsUseCase,
+    CreatePostUseCase,
+    GetPostUseCase,
+    UpdatePostUseCase,
+    DeletePostUseCase,
   ],
 })
 export class HttpModule {}

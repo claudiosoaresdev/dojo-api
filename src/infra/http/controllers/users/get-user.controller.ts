@@ -5,12 +5,14 @@ import {
   Param,
   HttpCode,
   Get,
+  NotFoundException,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { z } from 'zod';
 import { zodToOpenAPI } from 'nestjs-zod';
 
 import { GetUserUseCase } from 'src/domain/users/application/usecases/get-user.usecase';
+import { UserNotFoundError } from 'src/domain/users/application/usecases/errors/user-not-found.error';
 
 import {
   UserPresenter,
@@ -64,7 +66,14 @@ export class GetUserController {
     });
 
     if (result.isLeft()) {
-      throw new BadRequestException();
+      const error = result.value;
+
+      switch (error.constructor) {
+        case UserNotFoundError:
+          throw new NotFoundException(error.message);
+        default:
+          throw new BadRequestException(error.message);
+      }
     }
 
     const { user } = result.value;
