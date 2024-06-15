@@ -5,14 +5,20 @@ import { PaginationResponse } from 'src/core/repositories/pagination-response';
 
 import { Post } from 'src/domain/feed/enterprise/entities/post';
 import { UsersRepository } from 'src/domain/users/application/repositories/users.repository';
+import { FollowerRelationshipsRepository } from 'src/domain/users/application/repositories/follower-relationships.repository';
 import { UserNotFoundError } from 'src/domain/users/application/usecases/errors/user-not-found.error';
 import { PostsRepository } from 'src/domain/feed/application/repositories/posts.repository';
-import { FollowerRelationshipsRepository } from '../../../users/application/repositories/follower-relationships.repository';
+
+export enum SortOrder {
+  RECENT = 'RECENT',
+  RELEVANT = 'RELEVANT',
+}
 
 interface PaginatePostsUseCaseRequest {
   userId: string;
   page: number;
   limit: number;
+  sortOrder: SortOrder;
 }
 
 type PaginatePostsUseCaseResponse = Either<
@@ -32,6 +38,7 @@ export class PaginateFeedUseCase {
     userId,
     page,
     limit,
+    sortOrder = SortOrder.RECENT,
   }: PaginatePostsUseCaseRequest): Promise<PaginatePostsUseCaseResponse> {
     const userExists = await this.usersRepository.findById(userId);
 
@@ -41,7 +48,7 @@ export class PaginateFeedUseCase {
 
     const followingRelationships =
       await this.followerRelationshipsRepository.findAllUsersFollowedByUserId(
-        userId,
+        userExists.id.toValue(),
       );
 
     const followingIds = followingRelationships.map((rel) =>
@@ -52,7 +59,7 @@ export class PaginateFeedUseCase {
       followingIds,
       page,
       limit,
-      sortOrder: 'RECENT',
+      sortOrder,
     });
 
     return right({

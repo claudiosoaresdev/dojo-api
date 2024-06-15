@@ -6,16 +6,9 @@ import {
   HttpCode,
   Put,
   Body,
+  NotFoundException,
 } from '@nestjs/common';
 import { z } from 'zod';
-
-import { UpdateUserUseCase } from 'src/domain/users/application/usecases/update-user.usecase';
-
-import {
-  UserPresenter,
-  UserPresenterResponse,
-} from 'src/infra/http/presenters/user.presenter';
-import { ZodValidationPipe } from 'src/infra/http/pipes/zod-validation.pipe';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -24,6 +17,15 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { zodToOpenAPI } from 'nestjs-zod';
+
+import { UpdateUserUseCase } from 'src/domain/users/application/usecases/update-user.usecase';
+import { UserNotFoundError } from 'src/domain/users/application/usecases/errors/user-not-found.error';
+
+import {
+  UserPresenter,
+  UserPresenterResponse,
+} from 'src/infra/http/presenters/user.presenter';
+import { ZodValidationPipe } from 'src/infra/http/pipes/zod-validation.pipe';
 
 const updateUserBodyParamsSchema = z.object({
   firstName: z.string(),
@@ -98,7 +100,14 @@ export class UpdateUserController {
     });
 
     if (result.isLeft()) {
-      throw new BadRequestException();
+      const error = result.value;
+
+      switch (error.constructor) {
+        case UserNotFoundError:
+          throw new NotFoundException(error.message);
+        default:
+          throw new BadRequestException(error.message);
+      }
     }
 
     const { user } = result.value;

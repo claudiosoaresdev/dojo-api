@@ -13,6 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum MediaType {
+  PHOTO
+  VIDEO
+}
+
 model User {
   id                String   @id @default(uuid()) @db.Uuid()
   firstName         String   @map("first_name")
@@ -32,6 +37,7 @@ model User {
   followings       FollowerRelationship[]   @relation("UserFollowings")
   initiatedFriends FriendshipRelationship[] @relation("UserInitiatedFriends")
   acceptedFriends  FriendshipRelationship[] @relation("UserAcceptedFriends")
+  posts            Post[]                   @relation()
 
   @@map("users")
 }
@@ -60,4 +66,18 @@ model FriendshipRelationship {
 
   @@unique([initiatorId, acceptorId])
   @@map("friendship_relationships")
+}
+
+model Post {
+  id        String     @id @default(uuid()) @db.Uuid()
+  content   String
+  mediaUrl  String?
+  mediaType MediaType?
+  authorId  String     @db.Uuid()
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  author User @relation(fields: [authorId], references: [id])
+
+  @@map("posts")
 }

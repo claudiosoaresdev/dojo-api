@@ -7,7 +7,7 @@ import { PrismaService } from 'src/infra/database/prisma/services/prisma.service
 import { PrismaFriendshipRelationshipMapper } from 'src/infra/database/prisma/mappers/prisma-friendship-relationship.mapper';
 
 @Injectable()
-export class PrismaFriendshipRelationshipRepositoryImpl
+export class PrismaFriendshipRelationshipsRepositoryImpl
   implements FriendshipRelationshipsRepository
 {
   constructor(private readonly prismaService: PrismaService) {}

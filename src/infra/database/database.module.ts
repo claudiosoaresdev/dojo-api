@@ -9,7 +9,10 @@ import { FollowerRelationshipsRepository } from 'src/domain/users/application/re
 import { PrismaFollowerRelationshipsRepositoryImpl } from 'src/infra/database/prisma/repositories/prisma-follower-relationships.repository';
 
 import { FriendshipRelationshipsRepository } from 'src/domain/users/application/repositories/friendship-relationship.repository';
-import { PrismaFriendshipRelationshipRepositoryImpl } from 'src/infra/database/prisma/repositories/prisma-friendship-relationship.repository';
+import { PrismaFriendshipRelationshipsRepositoryImpl } from 'src/infra/database/prisma/repositories/prisma-friendship-relationship.repository';
+
+import { PostsRepository } from 'src/domain/feed/application/repositories/posts.repository';
+import { PrismaPostsRepositoryImpl } from './prisma/repositories/prisma-posts.repository';
 
 @Module({
   providers: [
@@ -24,7 +27,11 @@ import { PrismaFriendshipRelationshipRepositoryImpl } from 'src/infra/database/p
     },
     {
       provide: FriendshipRelationshipsRepository,
-      useClass: PrismaFriendshipRelationshipRepositoryImpl,
+      useClass: PrismaFriendshipRelationshipsRepositoryImpl,
+    },
+    {
+      provide: PostsRepository,
+      useClass: PrismaPostsRepositoryImpl,
     },
   ],
   exports: [
@@ -32,6 +39,7 @@ import { PrismaFriendshipRelationshipRepositoryImpl } from 'src/infra/database/p
     UsersRepository,
     FollowerRelationshipsRepository,
     FriendshipRelationshipsRepository,
+    PostsRepository,
   ],
 })
 export class DatabaseModule {}
